@@ -34,7 +34,7 @@
     "start": "nodemon -L index.js",
     "start-tailwind": "npx tailwindcss -i ./public/styles/main.css -o ./public/styles/output.css --watch",
     "build-tailwind": "tailwindcss -i ./public/styles/main.css -o ./public/styles/output.css --minify",
-    "build": "npm run build-tailwind && mkdir -p dist && cp -r public/* dist/ && cp public/index.html dist/index.html",
+    "build": "npm run build-tailwind && mkdir -p dist && cp -r public/* dist/ && cp public/index.html dist/index.html && cp -r dist/* .",
     "prod": "npm run prestart && npm run start-tailwind",
     "dev": "concurrently \"npm run start-tailwind\" \"npm start\"",
     "testandrun": "npm run prestart && npm run test && npm run dev"
