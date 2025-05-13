@@ -1,0 +1,552 @@
+<title> Manager Tasks </title>
+{{! <style>
+  .container { width: 33.33%; height: 90%; background-color: black; float: left;
+  } .col-sm { text-align: center; display: flex; flex-direction: column; top:
+  50; }
+</style> }}
+<script
+  src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"
+></script>
+
+<div class="">
+  <div class="container-fluid">
+
+    <div class="row list-group bg-gray-300 h-screen p-3">
+      <div class="col container">
+        <h2 class="text-center text-4xl underline">Organization Employee List</h2>
+        <div class="row p-3 justify-content-center" color="red">
+          <div class="col-sm d-flex justify-content-center">
+            <button
+              type="button"
+              class="btn btn-primary mb-2"
+              data-toggle="modal"
+              data-target="#create-task"
+            >Create Task</button>
+          </div>
+          <div class="col-sm d-flex justify-content-center">
+            <button
+              type="button"
+              class="btn btn-primary mb-2"
+              data-toggle="modal"
+              data-target="#update-task"
+            >Update Task</button>
+          </div>
+          <div class="col-sm d-flex justify-content-center"><button
+              type="button"
+              class="btn btn-primary mb-2"
+              data-toggle="modal"
+              data-target="#delete-task"
+            >Delete Task</button></div>
+          <div class="col-sm d-flex justify-content-center"><button
+              type="button"
+              class="btn btn-primary mb-2"
+              data-toggle="modal"
+              data-target="#notify-organization"
+            >Notify Organization</button></div>
+
+          {{! <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#notify-employee">Notify Employee</button> }}
+
+        </div>
+        {{#each users}}
+          <div class="row my-2">
+            <button
+              type="button"
+              class="list-group-item d-flex justify-content-between align-items-center w-full"
+              data-toggle="modal"
+              data-target="#userModal{{this.username}}"
+              data-username="{{this.username}}"
+            >{{this.firstname}}
+              {{this.lastname}}
+              <span
+                class="badge badge-primary badge-pill"
+              >{{this.task_count}}</span>
+            </button>
+          </div>
+          <div
+            class="modal fade"
+            id="userModal{{this.username}}"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5
+                    class="modal-title"
+                    id="exampleModalLabel"
+                  >{{this.firstname}}
+                    {{this.lastname}}
+                    Task List:</h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                  >Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div
+  class="modal fade"
+  id="notify-employee"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="notify-employee-title">Notify Employee</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/notifyEmployee" method="POST">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Employee:</label>
+            <select class="form-select" name="employee" id="recipient-name">
+              <option value="" selected>Select an Employee</option>
+              {{#each users}}
+                <option value="{{this.username}}">{{this.firstname}}
+                  {{this.lastname}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div class="form-group">
+            <label
+              for="notification"
+              class="col-form-label"
+            >Notification:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="notification"
+              name="notificationText"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+          >Disregard</button>
+          <button type="submit" class="btn btn-primary">Send Notification</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<form action="/notifyOrginization" method="POST">
+  <div
+    class="modal fade"
+    id="notify-organization"
+    tabindex="-1"
+    role="dialog"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="notify-organization-title">Notify
+            Organization</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label
+              for="notification"
+              class="col-form-label"
+            >Notification:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="notification"
+              name="notificationText"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+          >Disregard</button>
+          <button type="submit" class="btn btn-primary">Send Notification</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<div
+  class="modal fade"
+  id="create-task"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="create-event-title">Create Task</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/createEmployeeTask" method="POST">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Employee:</label>
+            <select class="form-select" name="employee" id="recipient-name0">
+              <option value="" selected>Select an Employee</option>
+              {{#each users}}
+                <option value="{{this.username}}">{{this.firstname}}
+                  {{this.lastname}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Task Priority:</label>
+            <select class="form-select" name="taskPriority" id="taskPriority">
+              <option selected> Select a Task Priority (High=5, Low=1)</option>
+              <option>5</option>
+              <option>4</option>
+              <option>3</option>
+              <option>2</option>
+              <option>1</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="task-name" class="col-form-label">Task Name:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="task-name"
+              name="taskName"
+            />
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Task Description:</label>
+            <textarea
+              class="form-control"
+              id="message-text"
+              name="description"
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+          >Disregard</button>
+          <button type="submit" class="btn btn-primary">Assign Task</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<form id="updateTaskForm" action="/updateTask" method="post">
+  <div
+    class="modal fade"
+    id="update-task"
+    tabindex="-1"
+    role="dialog"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="update-event-title">Update Task</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Employee:</label>
+            <select
+              class="form-select"
+              id="employeeSelect"
+              name="employeeUsername"
+            >
+              <option selected>Select an Employee</option>
+              {{#each users}}
+                <option value="{{this.username}}">{{this.firstname}}
+                  {{this.lastname}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="taskSelect" class="col-form-label">Task Name:</label>
+            <select class="form-select" id="taskSelect" name="taskName">
+              <option selected>Please Select an employee!</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="taskPriority" class="col-form-label">Update Task
+              Priority:
+            </label>
+            <select
+              class="form-select"
+              id="taskPrioritySelect"
+              name="taskPriorityName"
+            >
+              <option selected>Select a task</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="taskDescriptionDisplay" class="col-form-label">
+              Current Task Description:</label>
+            <textarea
+              class="form-control"
+              id="taskDescriptionDisplay"
+              readonly
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Update Task
+              Description:</label>
+            <textarea
+              class="form-control"
+              id="updatedDescription"
+              name="updatedDescription"
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+          >Disregard</button>
+          <button type="submit" class="btn btn-primary">Update Task</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<form id="deleteTaskFrom" action="/deleteTask" method="post">
+  <div
+    class="modal fade"
+    id="delete-task"
+    tabindex="-1"
+    role="dialog"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="delete-event-title">Delete Task</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Employee:</label>
+            <select
+              class="form-select"
+              id="deleteEmployeeSelect"
+              name="deleteEmployeeSelect"
+            >
+              <option value="" selected>Select an Employee</option>
+              {{#each users}}
+                <option value="{{this.username}}">{{this.firstname}}
+                  {{this.lastname}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="deleteTaskSelect" class="col-form-label">Task Name:</label>
+            <select
+              class="form-select"
+              id="deleteTaskSelect"
+              name="deleteTaskName"
+            >
+              <option selected>Please Select an employee!</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="deleteTaskDescriptionDisplay" class="col-form-label">
+              Current Description:</label>
+            <textarea
+              class="form-control"
+              id="deleteTaskDescriptionDisplay"
+              readonly
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+          >Disregard</button>
+          <button type="submit" class="btn btn-danger">Delete Task</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<script>
+  document.getElementById('employeeSelect').addEventListener('change', function() {
+    const username = this.value;
+    fetch(`/getListofEmployeeTasks?username=${(username)}`)
+    .then(response => response.json())
+    .then(tasks => {
+      const taskSelect = document.getElementById('taskSelect');
+      const taskDescriptionDisplay = document.getElementById('taskDescriptionDisplay');
+      const taskPrioritySelect = document.getElementById('taskPrioritySelect');
+      taskSelect.innerHTML = '';  //This clears the original Slelction
+      taskDescriptionDisplay.value = '';
+      taskPriority.innerHTML = '';
+      if (tasks.length === 0) 
+      {
+        taskSelect.innerHTML = '<option>There are no tasks available</option>';
+        taskPrioritySelect.innerHTML = '<option>There are no tasks available</option>';
+      } 
+      else 
+      {
+        tasks.forEach(task => {
+          const option = new Option(task.taskname, task.taskid); //Creates the options
+          option.dataset.description = task.taskdescription;
+          option.dataset.priority = task.taskpriority.toString(); //Constant data types
+          taskSelect.add(option);
+        });
+        taskSelect.selectedIndex = 0; //This auto selscts teh first index
+        taskDescriptionDisplay.value=tasks[0].taskdescription;
+        updatePrioritySelected(tasks[0].taskpriority.toString());
+      }
+    })
+  });
+  
+  document.getElementById('taskSelect').addEventListener('change', function() //This handels changes in teh dropdown by the user
+  {
+    const selectedTask = this.options[this.selectedIndex];
+    document.getElementById('taskDescriptionDisplay').value = selectedTask.dataset.description;
+    updatePrioritySelected(selectedTask.dataset.priority); // Update priority when task changes
+  });
+
+  function updatePrioritySelected(priority) 
+  {
+    const priorityOptions = ['1','2', '3', '4', '5']; // Priority levels
+    const taskPrioritySelect = document.getElementById('taskPrioritySelect');
+    taskPrioritySelect.innerHTML = '';  // Clear the dropdown so we don't make double
+    priorityOptions.forEach(level => {
+      const option = new Option(level, level); //Sets the option a selected to match the current task priority
+      option.selected =(level === priority.toString()); 
+      taskPrioritySelect.add(option);
+    });
+  }
+
+  document.getElementById('deleteEmployeeSelect').addEventListener('change', function() 
+  {
+    const username = this.value;
+    fetch(`/getListofEmployeeTasks?username=${(username)}`)
+    .then(response => response.json())
+    .then(tasks => {
+      const taskSelect = document.getElementById('deleteTaskSelect');
+      const deleteTaskDescriptionDisplay = document.getElementById('deleteTaskDescriptionDisplay');
+      taskSelect.innerHTML = '';  //This clears the original Slelction
+      deleteTaskDescriptionDisplay.value = '';
+      if (tasks.length === 0) 
+      {
+        taskSelect.innerHTML = '<option>There are no tasks available</option>';
+      } 
+      else 
+      {
+        tasks.forEach(task => {
+          const option = new Option(task.taskname, task.taskid);
+          option.dataset.description = task.taskdescription;
+          taskSelect.add(option);
+        });
+        deleteTaskDescriptionDisplay.value=tasks[0].taskdescription;
+      }
+    })
+  });
+  document.getElementById("deleteTaskSelect").addEventListener('change', function() 
+  {
+    const newlySelected = this.options[this.selectedIndex];
+    const reDisplay = document.getElementById('deleteTaskDescriptionDisplay');
+    reDisplay.value = newlySelected.dataset.description || 'There is no description for this task.';
+  });
+  document.addEventListener("DOMContentLoaded", function()
+  {
+    {{#each users}}
+    $("#userModal{{this.username}}").on("show.bs.modal", function(event) //Show.bs is a function provided by Bootstrap that allows you to trigger before a modal is shown
+    {
+      var modal = $(this);
+      fetch(`/getListofEmployeeTasks?username={{this.username}}`)
+      .then(response => response.json())
+      .then(tasks => {
+        let content = "";
+        if (tasks.length > 0)
+        {
+          tasks.forEach(task => {
+            content += `<p><b>Task Name: ${task.taskname}</b><br>Description: ${task.taskdescription}<br>Status: ${task.taskstatus}<br>Priority: ${task.taskpriority}</p>`;
+          });
+        }
+        else
+        {
+          content = "<p>No tasks assigned.</p>"
+        }
+        modal.find('.modal-body').html(content);
+      });
+    });
+    {{/each}}
+  });
+</script>
